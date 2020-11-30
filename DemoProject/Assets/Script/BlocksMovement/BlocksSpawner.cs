@@ -27,7 +27,6 @@ namespace Script.BlocksMovement
         {
             _currentBlock = _nextBlock ?? _blockFactory.Create();
             _currentBlock.Transform.position = _spawnPoint.transform.position;
-            _currentBlock.IsDisabled = false;
             _currentBlock.Transform.gameObject.SetActive(true);
             _currentBlock.GhostTransform.gameObject.SetActive(true);
 

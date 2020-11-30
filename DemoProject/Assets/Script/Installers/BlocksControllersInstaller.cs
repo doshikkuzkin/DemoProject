@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Script.BlocksMovement;
 using Script.GameControllers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -10,6 +11,10 @@ namespace Script.Installers
 {
     public class BlocksControllersInstaller : MonoInstaller
     {
+        [SerializeField] private TMP_Text levelText;
+        [SerializeField] private TMP_Text scoreText;
+        [SerializeField] private TMP_Text linesText;
+        
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private Image previewImage;
         [SerializeField] private GameObject[] prefabs;
@@ -26,13 +31,18 @@ namespace Script.Installers
             Container.BindInterfacesAndSelfTo<EndGameUIController>().AsSingle().WithArguments(endGameUICanvas, replayButton);
             
             Container.BindFactory<BlockFacade, BlockFacade.Factory>().FromSubContainerResolve().ByNewGameObjectMethod(SpawnBlock);
+            
+            
+            Container.BindInterfacesAndSelfTo<BlocksMovementController>().AsSingle().WithArguments(spawnPoint);
+            Container.BindInterfacesAndSelfTo<GhostBlocksMovementController>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<ScoreController>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<ScoreUIController>().AsSingle().WithArguments(scoreText, linesText, levelText).NonLazy();
         }
 
         private void SpawnBlock(DiContainer container)
         {
-            container.Bind<BlockFacade>().AsSingle();
-            container.BindInterfacesAndSelfTo<BlocksMovementController>().AsSingle().WithArguments(spawnPoint);
-            container.BindInterfacesAndSelfTo<GhostBlocksMovementController>().AsSingle();
+            container.BindInterfacesAndSelfTo<BlockFacade>().AsSingle();
             var prefabIndex = Random.Range(0, prefabs.Length);
             var prefab = prefabs[prefabIndex];
             var block = container.InstantiatePrefab(prefab);

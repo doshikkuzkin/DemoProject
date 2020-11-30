@@ -82,7 +82,8 @@ namespace Script.BlocksMovement
             {
                 if (_grid[rowIndex, lineIndex] == null) return false;
             }
-
+            
+            OnLineCompleted?.Invoke();
             return true;
         }
 
@@ -124,6 +125,7 @@ namespace Script.BlocksMovement
                     }
                 }
             }
+            OnBoardClean?.Invoke();
         }
         
         [Serializable]

@@ -3,31 +3,29 @@ using Zenject;
 
 namespace Script.BlocksMovement
 {
-    public class GhostBlocksMovementController : ITickable
+    public class GhostBlocksMovementController
     {
-        private BlockFacade _blockFacade;
         private Board _board;
 
-        public GhostBlocksMovementController(BlockFacade blockFacade, Board board)
+        public GhostBlocksMovementController(Board board)
         {
             _board = board;
-            _blockFacade = blockFacade;
         }
-        public void Tick()
+        public void Move(BlockFacade blockFacade)
         {
-            if (_blockFacade == null) return;
+            if (blockFacade == null) return;
             
-            _blockFacade.GhostTransform.position = _blockFacade.Transform.position;
-            _blockFacade.GhostTransform.rotation = _blockFacade.Transform.rotation;
+            blockFacade.GhostTransform.position = blockFacade.Transform.position;
+            blockFacade.GhostTransform.rotation = blockFacade.Transform.rotation;
 
-            while (_board.CheckMovementIsValid(_blockFacade.GhostTransform))
+            while (_board.CheckMovementIsValid(blockFacade.GhostTransform))
             {
-                _blockFacade.GhostTransform.position += Vector3.down;
+                blockFacade.GhostTransform.position += Vector3.down;
             }
 
-            if (!_board.CheckMovementIsValid(_blockFacade.GhostTransform))
+            if (!_board.CheckMovementIsValid(blockFacade.GhostTransform))
             {
-                _blockFacade.GhostTransform.position += Vector3.up;
+                blockFacade.GhostTransform.position += Vector3.up;
             }
         }
     }

@@ -5,85 +5,91 @@ using Zenject;
 
 namespace Script.BlocksMovement
 {
-    public class BlocksMovementController : ITickable
+    public class BlocksMovementController : IInitializable
     {
         private Transform _spawnPoint;
-        private BlockFacade _blockFacade;
         private BlocksSpawner _blocksSpawner;
         private Board _board;
+        private ScoreController _scoreController;
         private GameLoopController _gameLoopController;
         
         private float _secondsPassedAfterMove;
         private float _secondsBetweenMove;
-        private float _normalSecondsBetweenMove = 1f;
+        private float _normalSecondsBetweenMove;
 
-        public BlocksMovementController(Transform spawnPoint, BlockFacade blockFacade, BlocksSpawner blocksSpawner, 
-            Board board, GameLoopController gameLoopController)
+        public BlocksMovementController(Transform spawnPoint, BlocksSpawner blocksSpawner, 
+            Board board, GameLoopController gameLoopController, ScoreController scoreController)
         {
             _spawnPoint = spawnPoint;
-            _blockFacade = blockFacade;
             _blocksSpawner = blocksSpawner;
             _board = board;
             _gameLoopController = gameLoopController;
-            
+
+            _scoreController = scoreController;
+
+            _normalSecondsBetweenMove = _scoreController.GetInitialDifficulty();
             _secondsBetweenMove = _normalSecondsBetweenMove;
-            
-            Debug.Log("Constructor");
         }
-
-        public void Tick()
+        
+        public void Initialize()
         {
-            if (_blockFacade == null) return;
-            if (_blockFacade.IsDisabled) return;
-
-            HandleUserInput();
-            
-            MoveDownConstant();
+            _scoreController.OnLevelChanged += OnDifficultyLevelChanged;
         }
 
-        private void HandleUserInput()
+        private void OnDifficultyLevelChanged(int level, float secondsBetweenMove)
+        {
+            _normalSecondsBetweenMove = secondsBetweenMove;
+        }
+
+        public void Move(BlockFacade blockFacade)
+        {
+            HandleUserInput(blockFacade);
+            
+            MoveDownConstant(blockFacade);
+        }
+
+        private void HandleUserInput(BlockFacade blockFacade)
         {
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                MoveByControls(Vector3.right);
+                MoveByControls(blockFacade, Vector3.right);
             }
             
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                MoveByControls(Vector3.left);
+                MoveByControls(blockFacade, Vector3.left);
             }
             
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                RotateByControls();
+                RotateByControls(blockFacade);
             }
             
             if (Input.GetKey(KeyCode.DownArrow))
             {
-                ChangeMoveRate(_normalSecondsBetweenMove / 10);
+                ChangeMoveRate(_normalSecondsBetweenMove / 15);
             }
-
-            if (Input.GetKeyUp(KeyCode.DownArrow))
+            else
             {
                 ChangeMoveRate(_normalSecondsBetweenMove);
             }
         }
 
-        private void MoveByControls(Vector3 movement)
+        private void MoveByControls(BlockFacade blockFacade, Vector3 movement)
         {
-            _blockFacade.Transform.position += movement;
-            if (!_board.CheckMovementIsValid(_blockFacade.Transform))
+            blockFacade.Transform.position += movement;
+            if (!_board.CheckMovementIsValid(blockFacade.Transform))
             {
-                _blockFacade.Transform.position -= movement;
+                blockFacade.Transform.position -= movement;
             }
         }
 
-        private void RotateByControls()
+        private void RotateByControls(BlockFacade blockFacade)
         {
-            _blockFacade.Transform.RotateAround(_blockFacade.Transform.TransformPoint(_blockFacade.RotationPoint), Vector3.forward, 90);
-            if (!_board.CheckMovementIsValid(_blockFacade.Transform))
+            blockFacade.Transform.RotateAround(blockFacade.Transform.TransformPoint(blockFacade.RotationPoint), Vector3.forward, 90);
+            if (!_board.CheckMovementIsValid(blockFacade.Transform))
             {
-                _blockFacade.Transform.RotateAround(_blockFacade.Transform.TransformPoint(_blockFacade.RotationPoint), Vector3.forward, -90);
+                blockFacade.Transform.RotateAround(blockFacade.Transform.TransformPoint(blockFacade.RotationPoint), Vector3.forward, -90);
             }
         }
 
@@ -92,37 +98,37 @@ namespace Script.BlocksMovement
             _secondsBetweenMove = secondsBetweenMove;
         }
         
-        private void MoveDownConstant()
+        private void MoveDownConstant(BlockFacade blockFacade)
         {
             _secondsPassedAfterMove += Time.deltaTime;
             if (_secondsPassedAfterMove >= _secondsBetweenMove)
             {
-                _blockFacade.Transform.position += Vector3.down;
+                blockFacade.Transform.position += Vector3.down;
                 _secondsPassedAfterMove = 0;
-                if (!_board.CheckMovementIsValid(_blockFacade.Transform))
+                if (!_board.CheckMovementIsValid(blockFacade.Transform))
                 {
-                    _blockFacade.Transform.position -= Vector3.down;
-                    _board.AddToGrid(_blockFacade.Transform);
+                    blockFacade.Transform.position -= Vector3.down;
+                    _board.AddToGrid(blockFacade.Transform);
                     
-                    foreach (Transform childTransform in _blockFacade.Transform)
+                    foreach (Transform childTransform in blockFacade.Transform)
                     {
                         if (childTransform.position.y >= _spawnPoint.position.y)
                         {
                             _gameLoopController.StopGame();
-                            _blockFacade.IsDisabled = true;
+                            blockFacade.IsDisabled = true;
                         }
                     }
 
-                    var parentTransform = _blockFacade.Transform.parent;
-                    _blockFacade.Transform.parent = null;
+                    var parentTransform = blockFacade.Transform.parent;
+                    blockFacade.Transform.parent = null;
                     _board.DestroyGameObject(parentTransform);
                     
-                    _blockFacade.Transform.DetachChildren();
-                    _board.DestroyGameObject(_blockFacade.Transform);
+                    blockFacade.Transform.DetachChildren();
+                    _board.DestroyGameObject(blockFacade.Transform);
 
                     _board.CheckForFullLines();
                     
-                    if (_blockFacade.IsDisabled) return;
+                    if (blockFacade.IsDisabled) return;
                     
                     _blocksSpawner.SpawnNewBlock();
                 }

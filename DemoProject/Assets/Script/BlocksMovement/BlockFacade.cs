@@ -3,8 +3,11 @@ using Zenject;
 
 namespace Script.BlocksMovement
 {
-    public class BlockFacade
+    public class BlockFacade : ITickable
     {
+        private BlocksMovementController _blocksMovementController;
+        private GhostBlocksMovementController _ghostBlocksMovementController;
+        
         public Transform Transform { get; }
         public Transform GhostTransform { get; }
         public Block Block { get; }
@@ -12,16 +15,22 @@ namespace Script.BlocksMovement
         public Vector3 RotationPoint { get; }
         public bool IsDisabled { get; set; }
 
-
-        public BlockFacade(Block block, GhostBlock ghostBlock)
+        public BlockFacade(BlocksMovementController blocksMovementController, GhostBlocksMovementController ghostBlocksMovementController, Block block, GhostBlock ghostBlock)
         {
+            _blocksMovementController = blocksMovementController;
+            _ghostBlocksMovementController = ghostBlocksMovementController;
             Block = block;
             GhostBlock = ghostBlock;
             Transform = block.transform;
             RotationPoint = block.RotationPoint;
             GhostTransform = ghostBlock.transform;
+        }
 
-            IsDisabled = true;
+        public void Tick()
+        {
+            if (!Block.gameObject.activeSelf) return;
+            _blocksMovementController.Move(this);
+            _ghostBlocksMovementController.Move(this);
         }
         
         public class Factory : PlaceholderFactory<BlockFacade>

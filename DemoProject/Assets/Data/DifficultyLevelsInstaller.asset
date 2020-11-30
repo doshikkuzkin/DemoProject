@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 595b7066713ee4a25bf04bc4d444c9ad, type: 3}
+  m_Name: DifficultyLevelsInstaller
+  m_EditorClassIdentifier: 
+  difficultyLevels:
+    levels:
+    - linesToComplete: 3
+      secondsBetweenBlockMove: 0.9
+      scorePointsForLine: 1
+    - linesToComplete: 8
+      secondsBetweenBlockMove: 0.7
+      scorePointsForLine: 2
+    - linesToComplete: 15
+      secondsBetweenBlockMove: 0.6
+      scorePointsForLine: 3
+    - linesToComplete: 20
+      secondsBetweenBlockMove: 0.5
+      scorePointsForLine: 3
+    - linesToComplete: 30
+      secondsBetweenBlockMove: 0.3
+      scorePointsForLine: 3
