@@ -6,6 +6,9 @@ namespace Script.BlocksMovement
 {
     public class Board : MonoBehaviour
     {
+        public event Action OnBoardClean;
+        public event Action OnLineCompleted;
+        
         private Transform[,] _grid;
         private BoardSettings _boardSettings;
 

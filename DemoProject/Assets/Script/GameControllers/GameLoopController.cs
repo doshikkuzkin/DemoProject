@@ -1,33 +1,46 @@
+using System;
 using Script.BlocksMovement;
 using UnityEngine;
 using Zenject;
 
 namespace Script.GameControllers
 {
-    public class GameLoopController : IInitializable
+    public class GameLoopController : IInitializable, IDisposable
     {
-        private BlocksMovementController _blocksMovementController;
         private Board _board;
-        
-        public GameLoopController(BlocksMovementController blocksMovementController, Board board)
+        private BlocksSpawner _blocksSpawner;
+        private EndGameUIController _endGameUIController;
+
+        private bool _gameIsRunning;
+
+        public bool GameIsRunning => _gameIsRunning;
+
+        public GameLoopController(BlocksSpawner blocksSpawner, EndGameUIController endGameUIController, Board board)
         {
-            _blocksMovementController = blocksMovementController;
+            _blocksSpawner = blocksSpawner;
+            _endGameUIController = endGameUIController;
             _board = board;
         }
         
         public void Initialize()
         {
-            _blocksMovementController.OnGameOver += EndGame;
+            _endGameUIController.OnPlayAgainButtonPressed += StartGame;
         }
 
-        private void EndGame()
-        {
-            Debug.Log("Show UI Window");
-        }
-
-        private void RestartGame()
+        private void StartGame()
         {
             _board.ClearBoard();
+            _blocksSpawner.SpawnNewBlock();
+        }
+
+        public void StopGame()
+        {
+            _endGameUIController.ShowUI();
+        }
+        
+        public void Dispose()
+        {
+            _endGameUIController.OnPlayAgainButtonPressed -= StartGame;
         }
     }
 }

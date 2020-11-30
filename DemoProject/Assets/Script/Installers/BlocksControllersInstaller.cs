@@ -15,17 +15,21 @@ namespace Script.Installers
         [SerializeField] private GameObject[] prefabs;
         [SerializeField] private GameObject[] ghostPrefabs;
         [SerializeField] private Board board;
+
+        [SerializeField] private GameObject endGameUICanvas;
+        [SerializeField] private Button replayButton;
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<BlocksSpawner>().AsSingle().WithArguments(spawnPoint, previewImage);
             Container.Bind<Board>().FromInstance(board).AsSingle();
+            Container.BindInterfacesAndSelfTo<GameLoopController>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<EndGameUIController>().AsSingle().WithArguments(endGameUICanvas, replayButton);
             
             Container.BindFactory<BlockFacade, BlockFacade.Factory>().FromSubContainerResolve().ByNewGameObjectMethod(SpawnBlock);
         }
 
         private void SpawnBlock(DiContainer container)
         {
-            container.BindInterfacesAndSelfTo<GameLoopController>().AsSingle();
             container.Bind<BlockFacade>().AsSingle();
             container.BindInterfacesAndSelfTo<BlocksMovementController>().AsSingle().WithArguments(spawnPoint);
             container.BindInterfacesAndSelfTo<GhostBlocksMovementController>().AsSingle();

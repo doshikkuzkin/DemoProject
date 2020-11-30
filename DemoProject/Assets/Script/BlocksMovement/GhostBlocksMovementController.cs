@@ -13,9 +13,10 @@ namespace Script.BlocksMovement
             _board = board;
             _blockFacade = blockFacade;
         }
-
         public void Tick()
         {
+            if (_blockFacade == null) return;
+            
             _blockFacade.GhostTransform.position = _blockFacade.Transform.position;
             _blockFacade.GhostTransform.rotation = _blockFacade.Transform.rotation;
 

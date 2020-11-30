@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Script.BlocksMovement
 {
-    public class BlocksSpawner : IInitializable
+    public class BlocksSpawner
     {
         private readonly Transform _spawnPoint;
         private Image _blockPreviewImage;
@@ -23,26 +23,13 @@ namespace Script.BlocksMovement
             _blockFactory = blockFactory;
         }
 
-        public void Initialize()
-        {  
-            _currentBlock = _blockFactory.Create();
-            _currentBlock.Transform.position = _spawnPoint.transform.position;
-            _currentBlock.IsDisabled = false;
-
-            _nextBlock = _blockFactory.Create();
-            _nextBlock.Transform.position = _spawnPoint.transform.position;
-            _nextBlock.Transform.gameObject.SetActive(false);
-            _nextBlock.GhostTransform.gameObject.SetActive(false);
-
-            _blockPreviewImage.sprite = _nextBlock.Block.PreviewSprite;
-        }
-
         public void SpawnNewBlock()
         {
-            _currentBlock = _nextBlock;
+            _currentBlock = _nextBlock ?? _blockFactory.Create();
+            _currentBlock.Transform.position = _spawnPoint.transform.position;
             _currentBlock.IsDisabled = false;
             _currentBlock.Transform.gameObject.SetActive(true);
-            _nextBlock.GhostTransform.gameObject.SetActive(true);
+            _currentBlock.GhostTransform.gameObject.SetActive(true);
 
             _nextBlock = _blockFactory.Create();
             _nextBlock.Transform.position = _spawnPoint.transform.position;

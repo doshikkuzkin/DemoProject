@@ -1,40 +1,39 @@
 using System;
+using Script.GameControllers;
 using UnityEngine;
 using Zenject;
 
 namespace Script.BlocksMovement
 {
-    public class BlocksMovementController : ITickable, IInitializable
+    public class BlocksMovementController : ITickable
     {
-        public event Action OnGameOver;
-        
         private Transform _spawnPoint;
         private BlockFacade _blockFacade;
         private BlocksSpawner _blocksSpawner;
         private Board _board;
+        private GameLoopController _gameLoopController;
         
         private float _secondsPassedAfterMove;
         private float _secondsBetweenMove;
         private float _normalSecondsBetweenMove = 1f;
 
-        public BlocksMovementController(Transform spawnPoint, BlockFacade blockFacade, BlocksSpawner blocksSpawner, Board board)
+        public BlocksMovementController(Transform spawnPoint, BlockFacade blockFacade, BlocksSpawner blocksSpawner, 
+            Board board, GameLoopController gameLoopController)
         {
             _spawnPoint = spawnPoint;
             _blockFacade = blockFacade;
             _blocksSpawner = blocksSpawner;
             _board = board;
-
+            _gameLoopController = gameLoopController;
+            
             _secondsBetweenMove = _normalSecondsBetweenMove;
-        }
-        
-        public void Initialize()
-        {
-            _blockFacade.IsDisabled = true;
-
+            
+            Debug.Log("Constructor");
         }
 
         public void Tick()
         {
+            if (_blockFacade == null) return;
             if (_blockFacade.IsDisabled) return;
 
             HandleUserInput();
@@ -109,7 +108,7 @@ namespace Script.BlocksMovement
                     {
                         if (childTransform.position.y >= _spawnPoint.position.y)
                         {
-                            OnGameOver?.Invoke();
+                            _gameLoopController.StopGame();
                             _blockFacade.IsDisabled = true;
                         }
                     }
