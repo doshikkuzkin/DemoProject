@@ -2200,6 +2200,8 @@ GameObject:
   - component: {fileID: 1677621649}
   - component: {fileID: 1677621648}
   - component: {fileID: 1677621650}
+  - component: {fileID: 1677621652}
+  - component: {fileID: 1677621651}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -2224,6 +2226,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 020a94fdabe13461e88c785a9ea0d7e1, type: 2}
   _monoInstallers:
   - {fileID: 1677621650}
+  - {fileID: 1677621652}
+  - {fileID: 1677621651}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -2267,11 +2271,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d656658eaade43748a07d03086680e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelText: {fileID: 1605785355}
-  scoreText: {fileID: 225457140}
-  linesText: {fileID: 1369374509}
-  spawnPoint: {fileID: 1493039568}
-  previewImage: {fileID: 417077438}
   prefabs:
   - {fileID: 4237772433192831429, guid: 11233cac468c04a9781338df44649dab, type: 3}
   - {fileID: 7087425364406132350, guid: 22bc77e716091407fb38484a2e71acbe, type: 3}
@@ -2288,9 +2287,38 @@ MonoBehaviour:
   - {fileID: 7381012878961384158, guid: 28042b1c53be1495492dd6054347cc75, type: 3}
   - {fileID: 1689705518164096997, guid: 0f44bdc70a75544eca41697b20868f49, type: 3}
   - {fileID: 5938172721395467797, guid: aae193ecc72294369b544ce786cd8fa7, type: 3}
-  board: {fileID: 2035921223}
+--- !u!114 &1677621651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677621647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c4e2c107eea4e1eab8693ec344b189, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelText: {fileID: 1605785355}
+  scoreText: {fileID: 225457140}
+  linesText: {fileID: 1369374509}
   endGameUICanvas: {fileID: 958019724}
   replayButton: {fileID: 1049613962}
+--- !u!114 &1677621652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677621647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d09bfaad984c443ca464eb0c8077462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPoint: {fileID: 1493039568}
+  previewImage: {fileID: 417077438}
+  board: {fileID: 2035921223}
 --- !u!1 &1873028997
 GameObject:
   m_ObjectHideFlags: 0
