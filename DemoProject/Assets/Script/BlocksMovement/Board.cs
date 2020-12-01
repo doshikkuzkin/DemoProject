@@ -1,4 +1,6 @@
 using System;
+using Script.GameControllers;
+using Script.GameControllersInterfaces;
 using UnityEngine;
 using Zenject;
 
@@ -8,6 +10,10 @@ namespace Script.BlocksMovement
     {
         public event Action OnBoardClean;
         public event Action OnLineCompleted;
+        public event Action OnTopBorderReached;
+        public event Action OnBlockPlaced;
+        
+        [SerializeField] private Transform _spawnPoint;
         
         private Transform[,] _grid;
         private BoardSettings _boardSettings;
@@ -41,7 +47,6 @@ namespace Script.BlocksMovement
                     return false;
                 }
             }
-
             return true;
         }
 
@@ -56,14 +61,46 @@ namespace Script.BlocksMovement
 
                 _grid[roundedX, roundedY] = block;
             }
+            
+            CheckIfTopBorderReached(blockTransform);
         }
 
-        public void DestroyGameObject(Transform gameObjectTransform)
+        private void CheckIfTopBorderReached(Transform blockTransform)
+        {
+            bool borderIsReached = false;
+            
+            foreach (Transform childTransform in blockTransform)
+            {
+                if (childTransform.position.y >= _spawnPoint.position.y)
+                {
+                    borderIsReached = true;
+                }
+            }
+            
+            var parentTransform = blockTransform.parent;
+            blockTransform.parent = null;
+            DestroyGameObject(parentTransform);
+                    
+            blockTransform.DetachChildren();
+            DestroyGameObject(blockTransform);
+
+            if (borderIsReached)
+            {
+                OnTopBorderReached?.Invoke();
+            }
+            else
+            {
+                CheckForFullLines();
+                OnBlockPlaced?.Invoke();
+            }
+        }
+
+        private void DestroyGameObject(Transform gameObjectTransform)
         {
             Destroy(gameObjectTransform.gameObject);
         }
 
-        public void CheckForFullLines()
+        private void CheckForFullLines()
         {
             for (int i = _boardSettings.boardTopBoundary; i >= 0; i--)
             {

@@ -13,7 +13,7 @@ public class GameControllersInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.BindInterfacesAndSelfTo<BlocksSpawner>().AsSingle().WithArguments(spawnPoint, previewImage);
-        Container.BindInterfacesAndSelfTo<BlocksMovementController>().AsSingle().WithArguments(spawnPoint);
+        Container.BindInterfacesAndSelfTo<BlocksMovementController>().AsSingle();
         Container.BindInterfacesAndSelfTo<GhostBlocksMovementController>().AsSingle();
         Container.Bind<Board>().FromInstance(board).AsSingle();
         Container.BindInterfacesAndSelfTo<ScoreController>().AsSingle().NonLazy();

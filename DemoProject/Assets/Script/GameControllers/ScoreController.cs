@@ -1,15 +1,16 @@
 using System;
 using Script.BlocksMovement;
+using Script.GameControllersInterfaces;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Zenject;
 
 namespace Script.GameControllers
 {
-    public class ScoreController : IInitializable
+    public class ScoreController : IScoreController, IInitializable
     {
-        public event Action<int, float> OnLevelChanged;
-        public event Action<int, int> OnLinesAndScoreCountUpdated;
+        public event Action<int, float> OnLevelUpdated;
+        public event Action<int, int> OnScoreUpdated;
 
         private Board _board;
         private DifficultyLevels _difficultyLevels;
@@ -33,9 +34,9 @@ namespace Script.GameControllers
         {
             _linesCount = 0;
             _playerScore = 0;
-            OnLinesAndScoreCountUpdated?.Invoke(_linesCount, _playerScore);
+            OnScoreUpdated?.Invoke(_linesCount, _playerScore);
             _currentLevelIndex = 0;
-            OnLevelChanged?.Invoke(_currentLevelIndex + 1, _difficultyLevels.levels[_currentLevelIndex].secondsBetweenBlockMove);
+            OnLevelUpdated?.Invoke(_currentLevelIndex + 1, _difficultyLevels.levels[_currentLevelIndex].secondsBetweenBlockMove);
         }
 
         public float GetInitialDifficulty()
@@ -53,7 +54,7 @@ namespace Script.GameControllers
         private void IncrementScore()
         {
             _playerScore += _difficultyLevels.levels[_currentLevelIndex].scorePointsForLine;
-            OnLinesAndScoreCountUpdated?.Invoke(_linesCount, _playerScore);
+            OnScoreUpdated?.Invoke(_linesCount, _playerScore);
         }
 
         private void CheckNextLevelReached()
@@ -63,7 +64,7 @@ namespace Script.GameControllers
                 if (_linesCount >= _difficultyLevels.levels[_currentLevelIndex].linesToComplete)
                 {
                     _currentLevelIndex++;
-                    OnLevelChanged?.Invoke(_currentLevelIndex + 1, _difficultyLevels.levels[_currentLevelIndex].secondsBetweenBlockMove);
+                    OnLevelUpdated?.Invoke(_currentLevelIndex + 1, _difficultyLevels.levels[_currentLevelIndex].secondsBetweenBlockMove);
                 }
             }
         }

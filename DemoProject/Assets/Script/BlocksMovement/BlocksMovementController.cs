@@ -1,5 +1,6 @@
 using System;
 using Script.GameControllers;
+using Script.GameControllersInterfaces;
 using UnityEngine;
 using Zenject;
 
@@ -7,21 +8,16 @@ namespace Script.BlocksMovement
 {
     public class BlocksMovementController : IInitializable
     {
-        private Transform _spawnPoint;
-        private BlocksSpawner _blocksSpawner;
         private Board _board;
-        private ScoreController _scoreController;
-        private GameLoopController _gameLoopController;
+        private IScoreController _scoreController;
+        private IGameLoopController _gameLoopController;
         
         private float _secondsPassedAfterMove;
         private float _secondsBetweenMove;
         private float _normalSecondsBetweenMove;
 
-        public BlocksMovementController(Transform spawnPoint, BlocksSpawner blocksSpawner, 
-            Board board, GameLoopController gameLoopController, ScoreController scoreController)
+        public BlocksMovementController(Board board, IGameLoopController gameLoopController, IScoreController scoreController)
         {
-            _spawnPoint = spawnPoint;
-            _blocksSpawner = blocksSpawner;
             _board = board;
             _gameLoopController = gameLoopController;
 
@@ -33,10 +29,10 @@ namespace Script.BlocksMovement
         
         public void Initialize()
         {
-            _scoreController.OnLevelChanged += OnDifficultyLevelChanged;
+            _scoreController.OnLevelUpdated += OnDifficultyLevelUpdated;
         }
 
-        private void OnDifficultyLevelChanged(int level, float secondsBetweenMove)
+        private void OnDifficultyLevelUpdated(int level, float secondsBetweenMove)
         {
             _normalSecondsBetweenMove = secondsBetweenMove;
         }
@@ -109,28 +105,6 @@ namespace Script.BlocksMovement
                 {
                     blockFacade.Transform.position -= Vector3.down;
                     _board.AddToGrid(blockFacade.Transform);
-                    
-                    foreach (Transform childTransform in blockFacade.Transform)
-                    {
-                        if (childTransform.position.y >= _spawnPoint.position.y)
-                        {
-                            _gameLoopController.StopGame();
-                            blockFacade.IsDisabled = true;
-                        }
-                    }
-
-                    var parentTransform = blockFacade.Transform.parent;
-                    blockFacade.Transform.parent = null;
-                    _board.DestroyGameObject(parentTransform);
-                    
-                    blockFacade.Transform.DetachChildren();
-                    _board.DestroyGameObject(blockFacade.Transform);
-
-                    _board.CheckForFullLines();
-                    
-                    if (blockFacade.IsDisabled) return;
-                    
-                    _blocksSpawner.SpawnNewBlock();
                 }
             }
         }

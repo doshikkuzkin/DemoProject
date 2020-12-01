@@ -1,46 +1,53 @@
 using System;
 using Script.BlocksMovement;
+using Script.GameControllersInterfaces;
 using UnityEngine;
 using Zenject;
 
 namespace Script.GameControllers
 {
-    public class GameLoopController : IInitializable, IDisposable
+    public class GameLoopController : IGameLoopController, IInitializable, IDisposable
     {
-        private Board _board;
-        private BlocksSpawner _blocksSpawner;
-        private EndGameUIController _endGameUIController;
+        private readonly Board _board;
+        private readonly BlocksSpawner _blocksSpawner;
+        private readonly IUIWindow _endGameUIWindow;
 
-        private bool _gameIsRunning;
-
-        public bool GameIsRunning => _gameIsRunning;
-
-        public GameLoopController(BlocksSpawner blocksSpawner, EndGameUIController endGameUIController, Board board)
+        public GameLoopController(BlocksSpawner blocksSpawner, IUIWindow endGameUIWindow, Board board)
         {
             _blocksSpawner = blocksSpawner;
-            _endGameUIController = endGameUIController;
+            _endGameUIWindow = endGameUIWindow;
             _board = board;
         }
         
         public void Initialize()
         {
-            _endGameUIController.OnPlayAgainButtonPressed += StartGame;
+            _endGameUIWindow.OnCloseButtonPressed += StartGame;
+            _board.OnTopBorderReached += StopGame;
+            _board.OnBlockPlaced += SpawnNewBlock;
         }
 
-        private void StartGame()
+        public void StartGame()
         {
+            _endGameUIWindow.HideWindow();
             _board.ClearBoard();
             _blocksSpawner.SpawnNewBlock();
         }
 
         public void StopGame()
         {
-            _endGameUIController.ShowUI();
+            _endGameUIWindow.ShowWindow();
+        }
+
+        private void SpawnNewBlock()
+        {
+            _blocksSpawner.SpawnNewBlock();
         }
         
         public void Dispose()
         {
-            _endGameUIController.OnPlayAgainButtonPressed -= StartGame;
+            _endGameUIWindow.OnCloseButtonPressed -= StartGame;
+            _board.OnTopBorderReached -= StopGame;
+            _board.OnBlockPlaced -= SpawnNewBlock;
         }
     }
 }

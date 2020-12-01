@@ -1,3 +1,4 @@
+using Script.GameControllersInterfaces;
 using Script.Helpers;
 using TMPro;
 using UnityEngine;
@@ -7,12 +8,12 @@ namespace Script.GameControllers
 {
     public class ScoreUIController : IInitializable
     {
-        private ScoreController _scoreController;
+        private IScoreController _scoreController;
         private TMP_Text _scoreText;
         private TMP_Text _linesText;
         private TMP_Text _levelText;
 
-        public ScoreUIController(ScoreController scoreController, TMP_Text scoreText, TMP_Text linesText, TMP_Text levelText)
+        public ScoreUIController(IScoreController scoreController, TMP_Text scoreText, TMP_Text linesText, TMP_Text levelText)
         {
             _scoreController = scoreController;
             _scoreText = scoreText;
@@ -22,11 +23,11 @@ namespace Script.GameControllers
 
         public void Initialize()
         {
-            _scoreController.OnLevelChanged += UpdateLevelText;
-            _scoreController.OnLinesAndScoreCountUpdated += UpdateLinesAndScoreText;
+            _scoreController.OnLevelUpdated += UpdateLevelText;
+            _scoreController.OnScoreUpdated += UpdateScoreText;
         }
 
-        private void UpdateLinesAndScoreText(int lines, int score)
+        private void UpdateScoreText(int lines, int score)
         {
             _linesText.text = lines.ToString();
             _scoreText.text = score.FormatScore();

@@ -1,16 +1,17 @@
 using System;
+using Script.GameControllersInterfaces;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
 namespace Script.GameControllers
 {
-    public class EndGameUIController : IInitializable
+    public class EndGameUIController : IUIWindow, IInitializable
     {
     private GameObject _endGameUI;
     private Button _replayButton;
 
-    public event Action OnPlayAgainButtonPressed;
+    public event Action OnCloseButtonPressed;
 
     public EndGameUIController(GameObject endGameUI, Button replayButton)
     {
@@ -23,15 +24,19 @@ namespace Script.GameControllers
         _replayButton.onClick.AddListener(Replay);
     }
 
-    public void ShowUI()
+    public void ShowWindow()
     {
         _endGameUI.SetActive(true);
     }
 
-    private void Replay()
+    public void HideWindow()
     {
         _endGameUI.SetActive(false);
-        OnPlayAgainButtonPressed?.Invoke();
+    }
+
+    private void Replay()
+    {
+        OnCloseButtonPressed?.Invoke();
     }
     
     }
