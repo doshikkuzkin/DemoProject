@@ -1,4 +1,3 @@
-using Script.BlocksMovement;
 using UnityEngine;
 using Zenject;
 
@@ -7,7 +6,7 @@ namespace Script.Installers
     [CreateAssetMenu(fileName = "BoardSettingsInstaller", menuName = "Installers/BoardSettingsInstaller")]
     public class SettingsInstaller : ScriptableObjectInstaller<SettingsInstaller>
     {
-        [SerializeField] private Board.BoardSettings boardSettings;
+        [SerializeField] private BoardSettings boardSettings;
         [SerializeField] private BlocksSpeedSettings blocksSpeedSettings;
         public override void InstallBindings()
         {

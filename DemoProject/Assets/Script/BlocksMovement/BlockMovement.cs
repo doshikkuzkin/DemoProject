@@ -1,6 +1,4 @@
-using System;
-using Script.GameControllers;
-using Script.GameControllersInterfaces;
+using Script.Audio;
 using Script.Installers;
 using UnityEngine;
 using Zenject;
@@ -65,6 +63,7 @@ namespace Script.BlocksMovement
 
         private void MoveByControls(BlockFacade blockFacade, Vector3 movement)
         {
+            AudioPlayer.Instance.PlaySound(SoundType.MoveBlock);
             blockFacade.BlockTransform.position += movement;
             if (!_board.CheckMovementIsValid(blockFacade.BlockTransform))
             {
@@ -74,6 +73,7 @@ namespace Script.BlocksMovement
 
         private void RotateByControls(BlockFacade blockFacade)
         {
+            AudioPlayer.Instance.PlaySound(SoundType.RotateBlock);
             blockFacade.BlockTransform.RotateAround(blockFacade.BlockTransform.TransformPoint(blockFacade.RotationPoint), Vector3.forward, 90);
             if (!_board.CheckMovementIsValid(blockFacade.BlockTransform))
             {
@@ -95,8 +95,13 @@ namespace Script.BlocksMovement
                 _secondsPassedAfterMove = 0;
                 if (!_board.CheckMovementIsValid(blockFacade.BlockTransform))
                 {
+                    AudioPlayer.Instance.PlaySound(SoundType.DropBlock);
                     blockFacade.BlockTransform.position -= Vector3.down;
                     _board.AddToGrid(blockFacade.BlockTransform);
+                }
+                else
+                {
+                    AudioPlayer.Instance.PlaySound(SoundType.MoveBlock);
                 }
             }
         }

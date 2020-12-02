@@ -1,0 +1,16 @@
+{
+    "name": "GameLoop",
+    "references": [
+        "Unity.TextMeshPro",
+        "Zenject",
+        "Configs"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

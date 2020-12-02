@@ -1,26 +1,29 @@
 using System;
+using Script.Audio;
 using Script.GameControllers;
 using Script.GameControllersInterfaces;
+using Script.Installers;
 using UnityEngine;
 using Zenject;
+using Object = UnityEngine.Object;
 
 namespace Script.BlocksMovement
 {
-    public class Board : MonoBehaviour
+    public class Board : ILinesCleaner
     {
         public event Action OnLineCompleted;
         public event Action OnTopBorderReached;
         public event Action OnBlockPlaced;
         
-        [SerializeField] private Transform _spawnPoint;
-        
+        private Transform _spawnPoint;
         private Transform[,] _grid;
         private BoardSettings _boardSettings;
 
-        [Inject]
-        public void Construct(BoardSettings boardSettings)
+        public Board(Transform spawnPoint, BoardSettings boardSettings)
         {
+            _spawnPoint = spawnPoint;
             _boardSettings = boardSettings;
+            
             _grid = new Transform[_boardSettings.boardRightBoundary + 1,_boardSettings.boardTopBoundary + 1];
         }
 
@@ -85,6 +88,7 @@ namespace Script.BlocksMovement
 
             if (borderIsReached)
             {
+                AudioPlayer.Instance.PlaySound(SoundType.EndGame);
                 OnTopBorderReached?.Invoke();
             }
             else
@@ -96,7 +100,7 @@ namespace Script.BlocksMovement
 
         private void DestroyGameObject(Transform gameObjectTransform)
         {
-            Destroy(gameObjectTransform.gameObject);
+            Object.Destroy(gameObjectTransform.gameObject);
         }
 
         private void CheckForFullLines()
@@ -105,6 +109,7 @@ namespace Script.BlocksMovement
             {
                 if (HasFullLine(i))
                 {
+                    OnLineCompleted?.Invoke();
                     DeleteLine(i);
                     MoveRowDown(i);
                 }
@@ -118,8 +123,6 @@ namespace Script.BlocksMovement
             {
                 if (_grid[rowIndex, lineIndex] == null) return false;
             }
-            
-            OnLineCompleted?.Invoke();
             return true;
         }
 
@@ -127,7 +130,7 @@ namespace Script.BlocksMovement
         {
             for (int rowIndex = 0; rowIndex <= _boardSettings.boardRightBoundary; rowIndex++)
             {
-                Destroy(_grid[rowIndex, lineIndex].gameObject);
+                Object.Destroy(_grid[rowIndex, lineIndex].gameObject);
                 _grid[rowIndex, lineIndex] = null;
             }
         }
@@ -161,15 +164,6 @@ namespace Script.BlocksMovement
                     }
                 }
             }
-        }
-        
-        [Serializable]
-        public class BoardSettings
-        {
-            public int boardRightBoundary;
-            public int boardLeftBoundary;
-            public int boardBottomBoundary;
-            public int boardTopBoundary;
         }
     }
 }

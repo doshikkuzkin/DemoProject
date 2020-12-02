@@ -1,22 +1,22 @@
 using System.Threading.Tasks;
+using Script.Audio;
 using Script.BlocksMovement;
 using Script.ControllersCore;
 using Script.GameControllersInterfaces;
+using Script.Installers;
 using UnityEngine;
 
 namespace Script.GameControllers
 {
     public class GameLoopController : ControllerBase
     {
-        private readonly Board _board;
         private readonly IUIWindow _endGameView;
         private ControllerBase _movementController;
         private ControllerBase _spawnController;
         private ControllerBase _scoreController;
 
-        public GameLoopController(IControllerFactory controllerFactory, Board board, IUIWindow endGameView) : base(controllerFactory)
+        public GameLoopController(IControllerFactory controllerFactory, IUIWindow endGameView) : base(controllerFactory)
         {
-            _board = board;
             _endGameView = endGameView;
         }
 
@@ -35,6 +35,7 @@ namespace Script.GameControllers
 
         private async void StartGame()
         {
+            AudioPlayer.Instance.PlaySound(SoundType.StartGame);
             _endGameView.HideWindow();
             _movementController = await CreateAndRunAsync<MovementController>(CancellationToken);
             Debug.Log($"{_movementController.GetType()} is {_movementController.State}");
