@@ -1,6 +1,7 @@
 using System;
 using Script.BlocksMovement;
 using Script.GameControllersInterfaces;
+using Script.Installers;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Zenject;
@@ -9,25 +10,28 @@ namespace Script.GameControllers
 {
     public class ScoreController : IScoreController, IInitializable
     {
-        public event Action<int, float> OnLevelUpdated;
+        public event Action<int> OnLevelUpdated;
         public event Action<int, int> OnScoreUpdated;
 
         private Board _board;
         private DifficultyLevels _difficultyLevels;
+        private BlocksSpeedSettings _currentSpeedSettings;
         private int _currentLevelIndex;
         private int _linesCount;
         private int _playerScore;
 
-        public ScoreController(Board board, DifficultyLevels difficultyLevels)
+        public ScoreController(Board board, DifficultyLevels difficultyLevels, BlocksSpeedSettings blocksSpeedSettings)
         {
             _board = board;
             _difficultyLevels = difficultyLevels;
+            _currentSpeedSettings = blocksSpeedSettings;
         }
         
         public void Initialize()
         {
             _board.OnBoardClean += DropToInitialDifficulty;
             _board.OnLineCompleted += IncrementLines;
+            _currentSpeedSettings.currentSpeed = _difficultyLevels.levels[_currentLevelIndex].secondsBetweenBlockMove;
         }
 
         private void DropToInitialDifficulty()
@@ -36,12 +40,8 @@ namespace Script.GameControllers
             _playerScore = 0;
             OnScoreUpdated?.Invoke(_linesCount, _playerScore);
             _currentLevelIndex = 0;
-            OnLevelUpdated?.Invoke(_currentLevelIndex + 1, _difficultyLevels.levels[_currentLevelIndex].secondsBetweenBlockMove);
-        }
-
-        public float GetInitialDifficulty()
-        {
-            return _difficultyLevels.levels[_currentLevelIndex].secondsBetweenBlockMove;
+            OnLevelUpdated?.Invoke(_currentLevelIndex + 1);
+            _currentSpeedSettings.currentSpeed = _difficultyLevels.levels[_currentLevelIndex].secondsBetweenBlockMove;
         }
 
         public void IncrementLines()
@@ -64,7 +64,8 @@ namespace Script.GameControllers
                 if (_linesCount >= _difficultyLevels.levels[_currentLevelIndex].linesToComplete)
                 {
                     _currentLevelIndex++;
-                    OnLevelUpdated?.Invoke(_currentLevelIndex + 1, _difficultyLevels.levels[_currentLevelIndex].secondsBetweenBlockMove);
+                    OnLevelUpdated?.Invoke(_currentLevelIndex + 1);
+                    _currentSpeedSettings.currentSpeed = _difficultyLevels.levels[_currentLevelIndex].secondsBetweenBlockMove;
                 }
             }
         }

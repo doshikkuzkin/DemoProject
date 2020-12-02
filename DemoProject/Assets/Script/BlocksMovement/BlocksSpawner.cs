@@ -26,14 +26,14 @@ namespace Script.BlocksMovement
         public void SpawnNewBlock()
         {
             _currentBlock = _nextBlock ?? _blockFactory.Create();
-            _currentBlock.Transform.position = _spawnPoint.transform.position;
-            _currentBlock.Transform.gameObject.SetActive(true);
-            _currentBlock.GhostTransform.gameObject.SetActive(true);
+            _currentBlock.BlockTransform.position = _spawnPoint.transform.position;
+            _currentBlock.BlockTransform.gameObject.SetActive(true);
+            _currentBlock.GhostBlockTransform.gameObject.SetActive(true);
 
             _nextBlock = _blockFactory.Create();
-            _nextBlock.Transform.position = _spawnPoint.transform.position;
-            _nextBlock.Transform.gameObject.SetActive(false);
-            _nextBlock.GhostTransform.gameObject.SetActive(false);
+            _nextBlock.BlockTransform.position = _spawnPoint.transform.position;
+            _nextBlock.BlockTransform.gameObject.SetActive(false);
+            _nextBlock.GhostBlockTransform.gameObject.SetActive(false);
             
             _blockPreviewImage.sprite = _nextBlock.Block.PreviewSprite;
         }

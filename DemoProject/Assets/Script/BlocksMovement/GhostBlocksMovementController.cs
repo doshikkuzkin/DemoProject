@@ -15,17 +15,17 @@ namespace Script.BlocksMovement
         {
             if (blockFacade == null) return;
             
-            blockFacade.GhostTransform.position = blockFacade.Transform.position;
-            blockFacade.GhostTransform.rotation = blockFacade.Transform.rotation;
+            blockFacade.GhostBlockTransform.position = blockFacade.BlockTransform.position;
+            blockFacade.GhostBlockTransform.rotation = blockFacade.BlockTransform.rotation;
 
-            while (_board.CheckMovementIsValid(blockFacade.GhostTransform))
+            while (_board.CheckMovementIsValid(blockFacade.GhostBlockTransform))
             {
-                blockFacade.GhostTransform.position += Vector3.down;
+                blockFacade.GhostBlockTransform.position += Vector3.down;
             }
 
-            if (!_board.CheckMovementIsValid(blockFacade.GhostTransform))
+            if (!_board.CheckMovementIsValid(blockFacade.GhostBlockTransform))
             {
-                blockFacade.GhostTransform.position += Vector3.up;
+                blockFacade.GhostBlockTransform.position += Vector3.up;
             }
         }
     }

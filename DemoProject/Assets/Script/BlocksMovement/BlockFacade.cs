@@ -5,25 +5,24 @@ namespace Script.BlocksMovement
 {
     public class BlockFacade : ITickable
     {
+        public Block Block { get; }
+        public Transform BlockTransform { get; }
+        public Transform GhostBlockTransform { get; }
+        public Vector3 RotationPoint { get; }
+        
+
         private BlocksMovementController _blocksMovementController;
         private GhostBlocksMovementController _ghostBlocksMovementController;
         
-        public Transform Transform { get; }
-        public Transform GhostTransform { get; }
-        public Block Block { get; }
-        public GhostBlock GhostBlock { get; }
-        public Vector3 RotationPoint { get; }
-        public bool IsDisabled { get; set; }
 
         public BlockFacade(BlocksMovementController blocksMovementController, GhostBlocksMovementController ghostBlocksMovementController, Block block, GhostBlock ghostBlock)
         {
             _blocksMovementController = blocksMovementController;
             _ghostBlocksMovementController = ghostBlocksMovementController;
             Block = block;
-            GhostBlock = ghostBlock;
-            Transform = block.transform;
+            GhostBlockTransform = ghostBlock.transform;
+            BlockTransform = block.transform;
             RotationPoint = block.RotationPoint;
-            GhostTransform = ghostBlock.transform;
         }
 
         public void Tick()

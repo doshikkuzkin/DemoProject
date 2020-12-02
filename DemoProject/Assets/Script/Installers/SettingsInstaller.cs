@@ -5,12 +5,14 @@ using Zenject;
 namespace Script.Installers
 {
     [CreateAssetMenu(fileName = "BoardSettingsInstaller", menuName = "Installers/BoardSettingsInstaller")]
-    public class BoardSettingsInstaller : ScriptableObjectInstaller<BoardSettingsInstaller>
+    public class SettingsInstaller : ScriptableObjectInstaller<SettingsInstaller>
     {
         [SerializeField] private Board.BoardSettings boardSettings;
+        [SerializeField] private BlocksSpeedSettings blocksSpeedSettings;
         public override void InstallBindings()
         {
             Container.BindInstance(boardSettings).IfNotBound();
+            Container.BindInstance(blocksSpeedSettings).IfNotBound();
         }
     }
 }

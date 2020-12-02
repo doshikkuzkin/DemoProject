@@ -1,6 +1,7 @@
 using System;
 using Script.GameControllers;
 using Script.GameControllersInterfaces;
+using Script.Installers;
 using UnityEngine;
 using Zenject;
 
@@ -9,32 +10,21 @@ namespace Script.BlocksMovement
     public class BlocksMovementController : IInitializable
     {
         private Board _board;
-        private IScoreController _scoreController;
-        private IGameLoopController _gameLoopController;
+        private BlocksSpeedSettings _speedSettings;
         
         private float _secondsPassedAfterMove;
         private float _secondsBetweenMove;
         private float _normalSecondsBetweenMove;
 
-        public BlocksMovementController(Board board, IGameLoopController gameLoopController, IScoreController scoreController)
+        public BlocksMovementController(Board board, BlocksSpeedSettings speedSettings)
         {
             _board = board;
-            _gameLoopController = gameLoopController;
-
-            _scoreController = scoreController;
-
-            _normalSecondsBetweenMove = _scoreController.GetInitialDifficulty();
-            _secondsBetweenMove = _normalSecondsBetweenMove;
+            _speedSettings = speedSettings;
         }
         
         public void Initialize()
         {
-            _scoreController.OnLevelUpdated += OnDifficultyLevelUpdated;
-        }
-
-        private void OnDifficultyLevelUpdated(int level, float secondsBetweenMove)
-        {
-            _normalSecondsBetweenMove = secondsBetweenMove;
+            
         }
 
         public void Move(BlockFacade blockFacade)
@@ -63,29 +53,29 @@ namespace Script.BlocksMovement
             
             if (Input.GetKey(KeyCode.DownArrow))
             {
-                ChangeMoveRate(_normalSecondsBetweenMove / 15);
+                ChangeMoveRate(_speedSettings.currentSpeed / 15);
             }
             else
             {
-                ChangeMoveRate(_normalSecondsBetweenMove);
+                ChangeMoveRate(_speedSettings.currentSpeed);
             }
         }
 
         private void MoveByControls(BlockFacade blockFacade, Vector3 movement)
         {
-            blockFacade.Transform.position += movement;
-            if (!_board.CheckMovementIsValid(blockFacade.Transform))
+            blockFacade.BlockTransform.position += movement;
+            if (!_board.CheckMovementIsValid(blockFacade.BlockTransform))
             {
-                blockFacade.Transform.position -= movement;
+                blockFacade.BlockTransform.position -= movement;
             }
         }
 
         private void RotateByControls(BlockFacade blockFacade)
         {
-            blockFacade.Transform.RotateAround(blockFacade.Transform.TransformPoint(blockFacade.RotationPoint), Vector3.forward, 90);
-            if (!_board.CheckMovementIsValid(blockFacade.Transform))
+            blockFacade.BlockTransform.RotateAround(blockFacade.BlockTransform.TransformPoint(blockFacade.RotationPoint), Vector3.forward, 90);
+            if (!_board.CheckMovementIsValid(blockFacade.BlockTransform))
             {
-                blockFacade.Transform.RotateAround(blockFacade.Transform.TransformPoint(blockFacade.RotationPoint), Vector3.forward, -90);
+                blockFacade.BlockTransform.RotateAround(blockFacade.BlockTransform.TransformPoint(blockFacade.RotationPoint), Vector3.forward, -90);
             }
         }
 
@@ -99,12 +89,12 @@ namespace Script.BlocksMovement
             _secondsPassedAfterMove += Time.deltaTime;
             if (_secondsPassedAfterMove >= _secondsBetweenMove)
             {
-                blockFacade.Transform.position += Vector3.down;
+                blockFacade.BlockTransform.position += Vector3.down;
                 _secondsPassedAfterMove = 0;
-                if (!_board.CheckMovementIsValid(blockFacade.Transform))
+                if (!_board.CheckMovementIsValid(blockFacade.BlockTransform))
                 {
-                    blockFacade.Transform.position -= Vector3.down;
-                    _board.AddToGrid(blockFacade.Transform);
+                    blockFacade.BlockTransform.position -= Vector3.down;
+                    _board.AddToGrid(blockFacade.BlockTransform);
                 }
             }
         }

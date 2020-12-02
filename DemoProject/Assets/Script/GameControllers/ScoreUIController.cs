@@ -33,7 +33,7 @@ namespace Script.GameControllers
             _scoreText.text = score.FormatScore();
         }
 
-        private void UpdateLevelText(int level, float secondsBetweenMove)
+        private void UpdateLevelText(int level)
         {
             _levelText.text = level.ToString();
         }
