@@ -16,7 +16,5 @@ public class GameControllersInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<BlockMovement>().AsSingle();
         Container.BindInterfacesAndSelfTo<GhostBlockMovement>().AsSingle();
         Container.Bind<Board>().FromInstance(board).AsSingle();
-        Container.BindInterfacesAndSelfTo<ScoreView>().AsSingle().NonLazy();
-        Container.BindInterfacesAndSelfTo<GameLoopController>().AsSingle().NonLazy();
     }
 }

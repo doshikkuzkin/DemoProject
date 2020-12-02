@@ -2199,6 +2199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1677621649}
   - component: {fileID: 1677621648}
+  - component: {fileID: 1677621653}
   - component: {fileID: 1677621650}
   - component: {fileID: 1677621652}
   - component: {fileID: 1677621651}
@@ -2228,6 +2229,7 @@ MonoBehaviour:
   - {fileID: 1677621650}
   - {fileID: 1677621652}
   - {fileID: 1677621651}
+  - {fileID: 1677621653}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -2319,6 +2321,18 @@ MonoBehaviour:
   spawnPoint: {fileID: 1493039568}
   previewImage: {fileID: 417077438}
   board: {fileID: 2035921223}
+--- !u!114 &1677621653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677621647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e277f4502352449480fe58cb30153af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1873028997
 GameObject:
   m_ObjectHideFlags: 0

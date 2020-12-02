@@ -8,7 +8,6 @@ namespace Script.BlocksMovement
 {
     public class Board : MonoBehaviour
     {
-        public event Action OnBoardClean;
         public event Action OnLineCompleted;
         public event Action OnTopBorderReached;
         public event Action OnBlockPlaced;
@@ -24,7 +23,7 @@ namespace Script.BlocksMovement
             _boardSettings = boardSettings;
             _grid = new Transform[_boardSettings.boardRightBoundary + 1,_boardSettings.boardTopBoundary + 1];
         }
-        
+
         public bool CheckMovementIsValid(Transform blockTransform)
         {
             foreach (Transform block in blockTransform)
@@ -162,7 +161,6 @@ namespace Script.BlocksMovement
                     }
                 }
             }
-            OnBoardClean?.Invoke();
         }
         
         [Serializable]

@@ -16,6 +16,6 @@ public class UIControllersInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.BindInterfacesAndSelfTo<EndGameView>().AsSingle().WithArguments(endGameUICanvas, replayButton);
-        Container.BindInterfacesAndSelfTo<ScoreUIController>().AsSingle().WithArguments(scoreText, linesText, levelText).NonLazy();
+        Container.BindInterfacesAndSelfTo<ScoreView>().AsSingle().WithArguments(scoreText, linesText, levelText).NonLazy();
     }
 }

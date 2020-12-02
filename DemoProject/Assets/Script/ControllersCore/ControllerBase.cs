@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Script.ControllersCore
 {
@@ -92,6 +93,11 @@ namespace Script.ControllersCore
             return CreateAndStartAsyncInternal<T>(type, arg, factory, token);
         }
 
+        public Task<T> CreateAndRunAsync<T>(CancellationToken token) where T : ControllerBase
+        {
+            return CreateAndStartAsyncInternal<T>(token: token);
+        }
+
         internal Task<T> CreateAndStartAsyncInternal<T>(object arg = null,
             IControllerFactory factory = null,
             CancellationToken token = default,
@@ -169,6 +175,15 @@ namespace Script.ControllersCore
                         $"Controller should be initialized before adding. Current state: {State}");
             }
         }
+
+        // public async Task Execute()
+        // {
+        //     switch (State)
+        //     {
+        //         case ControllerState.Running:
+        //             
+        //     }
+        // }
 
         public async Task StopAsync()
         {
