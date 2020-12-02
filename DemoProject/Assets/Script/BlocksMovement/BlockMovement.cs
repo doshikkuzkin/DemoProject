@@ -7,16 +7,17 @@ using Zenject;
 
 namespace Script.BlocksMovement
 {
-    public class BlocksMovementController : IInitializable
+    public class BlockMovement : IInitializable
     {
         private Board _board;
         private BlocksSpeedSettings _speedSettings;
         
         private float _secondsPassedAfterMove;
         private float _secondsBetweenMove;
-        private float _normalSecondsBetweenMove;
 
-        public BlocksMovementController(Board board, BlocksSpeedSettings speedSettings)
+        public bool IsMovementEnabled { get; set; }
+
+        public BlockMovement(Board board, BlocksSpeedSettings speedSettings)
         {
             _board = board;
             _speedSettings = speedSettings;
@@ -29,8 +30,9 @@ namespace Script.BlocksMovement
 
         public void Move(BlockFacade blockFacade)
         {
-            HandleUserInput(blockFacade);
+            if (!IsMovementEnabled) return;
             
+            HandleUserInput(blockFacade);
             MoveDownConstant(blockFacade);
         }
 

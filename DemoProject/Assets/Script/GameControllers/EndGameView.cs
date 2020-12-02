@@ -6,14 +6,14 @@ using Zenject;
 
 namespace Script.GameControllers
 {
-    public class EndGameUIController : IUIWindow, IInitializable
+    public class EndGameView : IUIWindow, IInitializable
     {
     private GameObject _endGameUI;
     private Button _replayButton;
 
     public event Action OnCloseButtonPressed;
 
-    public EndGameUIController(GameObject endGameUI, Button replayButton)
+    public EndGameView(GameObject endGameUI, Button replayButton)
     {
         _endGameUI = endGameUI;
         _replayButton = replayButton;

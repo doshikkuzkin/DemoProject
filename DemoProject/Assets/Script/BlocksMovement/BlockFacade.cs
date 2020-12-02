@@ -11,14 +11,14 @@ namespace Script.BlocksMovement
         public Vector3 RotationPoint { get; }
         
 
-        private BlocksMovementController _blocksMovementController;
-        private GhostBlocksMovementController _ghostBlocksMovementController;
+        private BlockMovement _blockMovement;
+        private GhostBlockMovement _ghostBlockMovement;
         
 
-        public BlockFacade(BlocksMovementController blocksMovementController, GhostBlocksMovementController ghostBlocksMovementController, Block block, GhostBlock ghostBlock)
+        public BlockFacade(BlockMovement blockMovement, GhostBlockMovement ghostBlockMovement, Block block, GhostBlock ghostBlock)
         {
-            _blocksMovementController = blocksMovementController;
-            _ghostBlocksMovementController = ghostBlocksMovementController;
+            _blockMovement = blockMovement;
+            _ghostBlockMovement = ghostBlockMovement;
             Block = block;
             GhostBlockTransform = ghostBlock.transform;
             BlockTransform = block.transform;
@@ -28,8 +28,8 @@ namespace Script.BlocksMovement
         public void Tick()
         {
             if (!Block.gameObject.activeSelf) return;
-            _blocksMovementController.Move(this);
-            _ghostBlocksMovementController.Move(this);
+            _blockMovement.Move(this);
+            _ghostBlockMovement.Move(this);
         }
         
         public class Factory : PlaceholderFactory<BlockFacade>

@@ -8,7 +8,7 @@ using Zenject;
 
 namespace Script.GameControllers
 {
-    public class ScoreController : IScoreController, IInitializable
+    public class ScoreView : IScoreController, IInitializable
     {
         public event Action<int> OnLevelUpdated;
         public event Action<int, int> OnScoreUpdated;
@@ -20,7 +20,7 @@ namespace Script.GameControllers
         private int _linesCount;
         private int _playerScore;
 
-        public ScoreController(Board board, DifficultyLevels difficultyLevels, BlocksSpeedSettings blocksSpeedSettings)
+        public ScoreView(Board board, DifficultyLevels difficultyLevels, BlocksSpeedSettings blocksSpeedSettings)
         {
             _board = board;
             _difficultyLevels = difficultyLevels;

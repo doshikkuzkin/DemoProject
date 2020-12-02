@@ -3,11 +3,11 @@ using Zenject;
 
 namespace Script.BlocksMovement
 {
-    public class GhostBlocksMovementController
+    public class GhostBlockMovement
     {
         private Board _board;
 
-        public GhostBlocksMovementController(Board board)
+        public GhostBlockMovement(Board board)
         {
             _board = board;
         }
