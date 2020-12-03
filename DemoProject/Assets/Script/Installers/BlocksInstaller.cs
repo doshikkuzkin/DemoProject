@@ -19,11 +19,11 @@ namespace Script.Installers
             container.BindInterfacesAndSelfTo<BlockFacade>().AsSingle();
             var prefabIndex = Random.Range(0, prefabs.Length);
             var prefab = prefabs[prefabIndex];
-            var block = container.InstantiatePrefab(prefab);
-            container.Bind<Block>().FromComponentOn(block).AsTransient();
+            var block = container.InstantiatePrefabForComponent<Block>(prefab);
+            container.Bind<Block>().FromInstance(block).AsSingle();
 
-            var ghostPrefab = container.InstantiatePrefab(ghostPrefabs[prefabIndex]);
-            container.Bind<GhostBlock>().FromComponentOn(ghostPrefab).AsTransient();
+            var ghostPrefab = container.InstantiatePrefabForComponent<GhostBlock>(ghostPrefabs[prefabIndex]);
+            container.Bind<GhostBlock>().FromInstance(ghostPrefab).AsSingle();
         }
     }
 }

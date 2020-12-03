@@ -4,10 +4,11 @@ using Script.Controllers.Score;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Grid = Script.BlocksMovement.Grid;
 
 namespace Script.Installers
 {
-    public class GameControllersInstaller : MonoInstaller
+    public class GameComponentsInstaller : MonoInstaller
     {
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private Image previewImage;
@@ -21,7 +22,9 @@ namespace Script.Installers
             Container.BindInterfacesAndSelfTo<BlocksSpawner>().AsSingle().WithArguments(spawnPoint, previewImage);
             Container.BindInterfacesAndSelfTo<BlockMovement>().AsSingle();
             Container.BindInterfacesAndSelfTo<GhostBlockMovement>().AsSingle();
-            Container.BindInterfacesAndSelfTo<Board.Board>().AsSingle().WithArguments(spawnPoint);
+            
+            Container.BindInterfacesAndSelfTo<Grid>().AsSingle();
+            Container.BindInterfacesAndSelfTo<GridModel>().AsSingle().WithArguments(spawnPoint);
 
             Container.BindInterfacesAndSelfTo<ScoreModel>().AsSingle();
             Container.BindInterfacesAndSelfTo<ScoreProcessor>().AsSingle();

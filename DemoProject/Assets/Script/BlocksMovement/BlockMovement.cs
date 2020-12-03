@@ -1,14 +1,13 @@
 using Script.Audio;
 using Script.Configs;
-using Script.Installers;
 using UnityEngine;
-using Zenject;
 
 namespace Script.BlocksMovement
 {
-    public class BlockMovement : IInitializable
+    public class BlockMovement
     {
-        private Board.Board _board;
+        private IGridProcessor _gridProcessor;
+        private IAudioPlayer _audioPlayer;
         private BlocksSpeedSettings _speedSettings;
         
         private float _secondsPassedAfterMove;
@@ -16,15 +15,11 @@ namespace Script.BlocksMovement
 
         public bool IsMovementEnabled { get; set; }
 
-        public BlockMovement(Board.Board board, BlocksSpeedSettings speedSettings)
+        public BlockMovement(IAudioPlayer audioPlayer, IGridProcessor gridProcessor, BlocksSpeedSettings speedSettings)
         {
-            _board = board;
+            _gridProcessor = gridProcessor;
             _speedSettings = speedSettings;
-        }
-        
-        public void Initialize()
-        {
-            
+            _audioPlayer = audioPlayer;
         }
 
         public void Move(BlockFacade blockFacade)
@@ -64,9 +59,9 @@ namespace Script.BlocksMovement
 
         private void MoveByControls(BlockFacade blockFacade, Vector3 movement)
         {
-            AudioPlayer.Instance.PlaySound(SoundType.MoveBlock);
+            _audioPlayer.PlaySound(SoundType.MoveBlock);
             blockFacade.BlockTransform.position += movement;
-            if (!_board.CheckMovementIsValid(blockFacade.BlockTransform))
+            if (!_gridProcessor.CheckMovementIsValid(blockFacade.BlockTransform))
             {
                 blockFacade.BlockTransform.position -= movement;
             }
@@ -74,9 +69,9 @@ namespace Script.BlocksMovement
 
         private void RotateByControls(BlockFacade blockFacade)
         {
-            AudioPlayer.Instance.PlaySound(SoundType.RotateBlock);
+            _audioPlayer.PlaySound(SoundType.RotateBlock);
             blockFacade.BlockTransform.RotateAround(blockFacade.BlockTransform.TransformPoint(blockFacade.RotationPoint), Vector3.forward, 90);
-            if (!_board.CheckMovementIsValid(blockFacade.BlockTransform))
+            if (!_gridProcessor.CheckMovementIsValid(blockFacade.BlockTransform))
             {
                 blockFacade.BlockTransform.RotateAround(blockFacade.BlockTransform.TransformPoint(blockFacade.RotationPoint), Vector3.forward, -90);
             }
@@ -94,15 +89,25 @@ namespace Script.BlocksMovement
             {
                 blockFacade.BlockTransform.position += Vector3.down;
                 _secondsPassedAfterMove = 0;
-                if (!_board.CheckMovementIsValid(blockFacade.BlockTransform))
+                if (!_gridProcessor.CheckMovementIsValid(blockFacade.BlockTransform))
                 {
-                    AudioPlayer.Instance.PlaySound(SoundType.DropBlock);
+                    _audioPlayer.PlaySound(SoundType.DropBlock);
                     blockFacade.BlockTransform.position -= Vector3.down;
-                    _board.AddToGrid(blockFacade.BlockTransform);
+                    _gridProcessor.AddToGrid(blockFacade.BlockTransform);
+                    if (_gridProcessor.CheckIfTopBorderReached(blockFacade.BlockTransform))
+                    {
+                        _audioPlayer.PlaySound(SoundType.EndGame);
+                        _gridProcessor.DetachChildren(blockFacade.BlockTransform);
+                    }
+                    else
+                    {
+                        _gridProcessor.DetachChildren(blockFacade.BlockTransform);
+                        _gridProcessor.CheckForFullLines();
+                    }
                 }
                 else
                 {
-                    AudioPlayer.Instance.PlaySound(SoundType.MoveBlock);
+                    _audioPlayer.PlaySound(SoundType.MoveBlock);
                 }
             }
         }

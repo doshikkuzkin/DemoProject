@@ -1,0 +1,23 @@
+{
+    "name": "TestsPlayMode",
+    "references": [
+        "Configs",
+        "GameLoop",
+        "Zenject",
+        "Zenject-TestFramework",
+        "Unity.TextMeshPro"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "NSubstitute.dll",
+        "Zenject-usage.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

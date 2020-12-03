@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Script.Audio;
 using Script.ControllersCore;
 using Script.ControllersEvents;
 using UnityEngine;
@@ -8,29 +9,22 @@ namespace Script.Controllers
     public class GameRootController : RootController
     {
         private ControllerBase _gameLoopController;
+        private IAudioPlayer _audioPlayer;
         
-        public GameRootController(IControllerFactory controllerFactory) : base(controllerFactory)
+        public GameRootController(IControllerFactory controllerFactory, IAudioPlayer audioPlayer) : base(controllerFactory)
         {
-            
-        }
-        
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
-            Debug.Log("Initialize root");
+            _audioPlayer = audioPlayer;
         }
 
         protected override async Task OnStartAsync()
         {
-            Debug.Log("Start root");
-
+            _audioPlayer.PlayBackgroundMusic();
             await RestartGame();
         }
         
         private async Task RestartGame()
         {
             await GameLoop();
-            Debug.Log($"{_gameLoopController.GetType()} is {_gameLoopController.State}");
         }
 
         private async Task GameLoop()
@@ -48,7 +42,6 @@ namespace Script.Controllers
             if (e is EndGameEvent)
             {
                 await StopAndRemoveController(_gameLoopController);
-                Debug.Log(_gameLoopController.State);
                 await RestartGame();
             }
         }

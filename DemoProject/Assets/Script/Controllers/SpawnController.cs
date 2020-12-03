@@ -3,41 +3,41 @@ using Script.BlocksMovement;
 using Script.ControllersCore;
 using Script.ControllersEvents;
 using UnityEngine;
+using Grid = Script.BlocksMovement.Grid;
 
 namespace Script.Controllers
 {
     public class SpawnController : ControllerBase
     {
         private BlocksSpawner _blocksSpawner;
-        private Board.Board _board;
+        private IGridProcessor _gridProcessor;
         
         public SpawnController(IControllerFactory controllerFactory,
             BlocksSpawner blocksSpawner,
-            Board.Board board)
+            IGridProcessor gridProcessor)
             : base(controllerFactory)
         {
             _blocksSpawner = blocksSpawner;
-            _board = board;
+            _gridProcessor = gridProcessor;
         }
 
         protected override Task OnStartAsync()
         {
-            _board.ClearBoard();
-            _board.OnBlockPlaced += _blocksSpawner.SpawnNewBlock;
-            _board.OnTopBorderReached += OnBoardFilled;
+            _gridProcessor.ClearGrid();
+            _gridProcessor.OnBlockPlaced += _blocksSpawner.SpawnNewBlock;
+            _gridProcessor.OnTopBorderReached += OnGridProcessorFilled;
             _blocksSpawner.SpawnNewBlock();
             return Task.CompletedTask;
         }
 
         protected override Task OnStopAsync()
         {
-            Debug.Log("Stop Spawn Controller");
-            _board.OnBlockPlaced -= _blocksSpawner.SpawnNewBlock;
-            _board.OnTopBorderReached -= OnBoardFilled;
+            _gridProcessor.OnBlockPlaced -= _blocksSpawner.SpawnNewBlock;
+            _gridProcessor.OnTopBorderReached -= OnGridProcessorFilled;
             return Task.CompletedTask;
         }
 
-        private void OnBoardFilled()
+        private void OnGridProcessorFilled()
         {
             DispatchBubblingEvent(new EndGameEvent());
         }

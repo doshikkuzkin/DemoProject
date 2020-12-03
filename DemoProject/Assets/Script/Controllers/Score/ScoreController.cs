@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Script.Board;
+using Script.BlocksMovement;
 using Script.ControllersCore;
 
 namespace Script.Controllers.Score

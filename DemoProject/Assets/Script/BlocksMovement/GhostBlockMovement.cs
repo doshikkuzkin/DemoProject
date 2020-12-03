@@ -5,13 +5,13 @@ namespace Script.BlocksMovement
 {
     public class GhostBlockMovement
     {
-        private Board.Board _board;
+        private IGridProcessor _gridProcessor;
         
         public bool IsMovementEnabled { get; set; }
 
-        public GhostBlockMovement(Board.Board board)
+        public GhostBlockMovement(IGridProcessor gridProcessorProcessor)
         {
-            _board = board;
+            _gridProcessor = gridProcessorProcessor;
         }
         public void Move(BlockFacade blockFacade)
         {
@@ -20,12 +20,12 @@ namespace Script.BlocksMovement
             blockFacade.GhostBlockTransform.position = blockFacade.BlockTransform.position;
             blockFacade.GhostBlockTransform.rotation = blockFacade.BlockTransform.rotation;
 
-            while (_board.CheckMovementIsValid(blockFacade.GhostBlockTransform))
+            while (_gridProcessor.CheckMovementIsValid(blockFacade.GhostBlockTransform))
             {
                 blockFacade.GhostBlockTransform.position += Vector3.down;
             }
 
-            if (!_board.CheckMovementIsValid(blockFacade.GhostBlockTransform))
+            if (!_gridProcessor.CheckMovementIsValid(blockFacade.GhostBlockTransform))
             {
                 blockFacade.GhostBlockTransform.position += Vector3.up;
             }

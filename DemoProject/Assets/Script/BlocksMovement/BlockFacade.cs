@@ -10,11 +10,9 @@ namespace Script.BlocksMovement
         public Transform GhostBlockTransform { get; }
         public Vector3 RotationPoint { get; }
         
-
         private BlockMovement _blockMovement;
         private GhostBlockMovement _ghostBlockMovement;
         
-
         public BlockFacade(BlockMovement blockMovement, GhostBlockMovement ghostBlockMovement, Block block, GhostBlock ghostBlock)
         {
             _blockMovement = blockMovement;

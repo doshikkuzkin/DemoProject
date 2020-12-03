@@ -6,10 +6,8 @@ using Zenject;
 
 namespace Script.Audio
 {
-    public class AudioPlayer : IInitializable
+    public class AudioPlayer : IAudioPlayer
     {
-        public static AudioPlayer Instance;
-        
         private AudioConfig _audioConfig;
         private AudioSource _musicAudioSource;
         private AudioSource _soundsAudioSource;
@@ -19,17 +17,6 @@ namespace Script.Audio
             _audioConfig = audioConfig;
             _musicAudioSource = musicAudioSource;
             _soundsAudioSource = soundsAudioSource;
-            
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-        }
-
-        public void Initialize()
-        {
-            _musicAudioSource.clip = _audioConfig.BackgroundMusic;
-            _musicAudioSource.Play();
         }
 
         public void PlaySound(SoundType soundType)
@@ -40,6 +27,12 @@ namespace Script.Audio
                 throw new Exception($"Sound of type {soundType} is not assigned in AudioConfig");
             }
             _soundsAudioSource.PlayOneShot(clip);
+        }
+
+        public void PlayBackgroundMusic()
+        {
+            _musicAudioSource.clip = _audioConfig.BackgroundMusic;
+            _musicAudioSource.Play();
         }
 
         private AudioClip GetSound(SoundType soundType)

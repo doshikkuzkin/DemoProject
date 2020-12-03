@@ -1,29 +1,26 @@
 using System;
 using Script.Audio;
-using Script.BlocksMovement;
 using Script.Configs;
-using Script.Installers;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Script.Board
+namespace Script.BlocksMovement
 {
-    public class Board : ILinesCleaner
+    public class Grid : ILinesCleaner, IGridProcessor
     {
+        private bool _isTopBoarderReached;
+        public IGridModel GridModel { get; set; }
         public event Action OnLineCompleted;
         public event Action OnTopBorderReached;
         public event Action OnBlockPlaced;
         
-        private Transform _spawnPoint;
-        private Transform[,] _grid;
         private BoardSettings _boardSettings;
 
-        public Board(Transform spawnPoint, BoardSettings boardSettings)
+        public Grid(BoardSettings boardSettings, IGridModel gridModel)
         {
-            _spawnPoint = spawnPoint;
             _boardSettings = boardSettings;
-            
-            _grid = new Transform[_boardSettings.boardRightBoundary + 1,_boardSettings.boardTopBoundary + 1];
+            GridModel = gridModel;
+            GridModel.Grid = new Transform[_boardSettings.boardRightBoundary + 1, _boardSettings.boardTopBoundary + 1];
         }
 
         public bool CheckMovementIsValid(Transform blockTransform)
@@ -43,7 +40,7 @@ namespace Script.Board
                     return false;
                 }
 
-                if (_grid[roundedX, roundedY] != null)
+                if (GridModel.Grid[roundedX, roundedY] != null)
                 {
                     return false;
                 }
@@ -60,41 +57,45 @@ namespace Script.Board
                 var roundedX = Mathf.RoundToInt(position.x);
                 var roundedY = Mathf.RoundToInt(position.y);
 
-                _grid[roundedX, roundedY] = block;
+                GridModel.Grid[roundedX, roundedY] = block;
             }
-            
-            CheckIfTopBorderReached(blockTransform);
         }
 
-        private void CheckIfTopBorderReached(Transform blockTransform)
+        public bool CheckIfTopBorderReached(Transform blockTransform)
         {
-            bool borderIsReached = false;
-            
+            _isTopBoarderReached = false;
+
             foreach (Transform childTransform in blockTransform)
             {
-                if (childTransform.position.y >= _spawnPoint.position.y)
+                if (childTransform.position.y >= GridModel.SpawnPoint.position.y)
                 {
-                    borderIsReached = true;
+                    _isTopBoarderReached = true;
+                    break;
+                    
                 }
             }
-            
+
+            return _isTopBoarderReached;
+        }
+
+        public void DetachChildren(Transform blockTransform)
+        {
             var parentTransform = blockTransform.parent;
-            blockTransform.parent = null;
-            DestroyGameObject(parentTransform);
-                    
+            if (parentTransform != null)
+            {
+                blockTransform.parent = null;
+                DestroyGameObject(parentTransform);
+            }
+
             blockTransform.DetachChildren();
             DestroyGameObject(blockTransform);
 
-            if (borderIsReached)
+            if (_isTopBoarderReached)
             {
-                AudioPlayer.Instance.PlaySound(SoundType.EndGame);
                 OnTopBorderReached?.Invoke();
+                return;
             }
-            else
-            {
-                CheckForFullLines();
-                OnBlockPlaced?.Invoke();
-            }
+            OnBlockPlaced?.Invoke();
         }
 
         private void DestroyGameObject(Transform gameObjectTransform)
@@ -102,7 +103,7 @@ namespace Script.Board
             Object.Destroy(gameObjectTransform.gameObject);
         }
 
-        private void CheckForFullLines()
+        public void CheckForFullLines()
         {
             for (int i = _boardSettings.boardTopBoundary; i >= 0; i--)
             {
@@ -116,11 +117,11 @@ namespace Script.Board
             }
         }
 
-        private bool HasFullLine(int lineIndex)
+        public bool HasFullLine(int lineIndex)
         {
             for (int rowIndex = 0; rowIndex <= _boardSettings.boardRightBoundary; rowIndex++)
             {
-                if (_grid[rowIndex, lineIndex] == null) return false;
+                if (GridModel.Grid[rowIndex, lineIndex] == null) return false;
             }
             return true;
         }
@@ -129,8 +130,11 @@ namespace Script.Board
         {
             for (int rowIndex = 0; rowIndex <= _boardSettings.boardRightBoundary; rowIndex++)
             {
-                Object.Destroy(_grid[rowIndex, lineIndex].gameObject);
-                _grid[rowIndex, lineIndex] = null;
+                if (GridModel.Grid[rowIndex, lineIndex] != null)
+                {
+                    Object.Destroy(GridModel.Grid[rowIndex, lineIndex].gameObject);
+                }
+                GridModel.Grid[rowIndex, lineIndex] = null;
             }
         }
 
@@ -140,26 +144,26 @@ namespace Script.Board
             {
                 for (int rowIndex = 0; rowIndex <= _boardSettings.boardRightBoundary; rowIndex++)
                 {
-                    if (_grid[rowIndex, currentLineIndex] != null)
+                    if (GridModel.Grid[rowIndex, currentLineIndex] != null)
                     {
-                        _grid[rowIndex, currentLineIndex - 1] = _grid[rowIndex, currentLineIndex];
-                        _grid[rowIndex, currentLineIndex] = null;
-                        _grid[rowIndex, currentLineIndex - 1].transform.position += Vector3.down;
+                        GridModel.Grid[rowIndex, currentLineIndex - 1] = GridModel.Grid[rowIndex, currentLineIndex];
+                        GridModel.Grid[rowIndex, currentLineIndex] = null;
+                        GridModel.Grid[rowIndex, currentLineIndex - 1].transform.position += Vector3.down;
                     }
                 }
             }
         }
 
-        public void ClearBoard()
+        public void ClearGrid()
         {
             for (int i = 0; i <= _boardSettings.boardTopBoundary; i++)
             {
                 for (int j = 0; j <= _boardSettings.boardRightBoundary; j++)
                 {
-                    if (_grid[j, i] != null)
+                    if (GridModel.Grid[j, i] != null)
                     {
-                        DestroyGameObject(_grid[j, i]);
-                        _grid[j, i] = null;
+                        DestroyGameObject(GridModel.Grid[j, i]);
+                        GridModel.Grid[j, i] = null;
                     }
                 }
             }
