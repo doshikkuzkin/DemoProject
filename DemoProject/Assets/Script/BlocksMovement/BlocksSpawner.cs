@@ -1,8 +1,5 @@
-using System.Collections;
-using Script.Installers;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace Script.BlocksMovement
 {

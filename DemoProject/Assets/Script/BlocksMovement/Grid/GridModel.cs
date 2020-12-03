@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Script.BlocksMovement
+namespace Script.BlocksMovement.Grid
 {
     public class GridModel : IGridModel
     {

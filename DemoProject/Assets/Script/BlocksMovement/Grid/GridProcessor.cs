@@ -1,12 +1,11 @@
 using System;
-using Script.Audio;
 using Script.Configs;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Script.BlocksMovement
+namespace Script.BlocksMovement.Grid
 {
-    public class Grid : ILinesCleaner, IGridProcessor
+    public class GridProcessor : ILinesCleaner, IGridProcessor
     {
         private bool _isTopBoarderReached;
         public IGridModel GridModel { get; set; }
@@ -16,7 +15,7 @@ namespace Script.BlocksMovement
         
         private BoardSettings _boardSettings;
 
-        public Grid(BoardSettings boardSettings, IGridModel gridModel)
+        public GridProcessor(BoardSettings boardSettings, IGridModel gridModel)
         {
             _boardSettings = boardSettings;
             GridModel = gridModel;

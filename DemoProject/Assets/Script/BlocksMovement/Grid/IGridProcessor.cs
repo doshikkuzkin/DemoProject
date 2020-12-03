@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Script.BlocksMovement
+namespace Script.BlocksMovement.Grid
 {
     public interface IGridProcessor
     {

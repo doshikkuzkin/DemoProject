@@ -4,7 +4,6 @@ using Script.Configs;
 using Script.Controllers.Score;
 using Script.ControllersCore;
 using Script.Views;
-using UnityEngine;
 
 namespace Script.Controllers
 {

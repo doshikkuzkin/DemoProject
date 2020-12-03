@@ -1,8 +1,6 @@
 using System;
 using Script.Configs;
-using Script.Installers;
 using UnityEngine;
-using Zenject;
 
 namespace Script.Audio
 {

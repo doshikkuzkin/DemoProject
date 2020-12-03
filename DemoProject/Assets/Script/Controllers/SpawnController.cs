@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 using Script.BlocksMovement;
+using Script.BlocksMovement.Grid;
 using Script.ControllersCore;
 using Script.ControllersEvents;
-using UnityEngine;
-using Grid = Script.BlocksMovement.Grid;
 
 namespace Script.Controllers
 {

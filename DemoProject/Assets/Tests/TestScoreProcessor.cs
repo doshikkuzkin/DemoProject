@@ -1,10 +1,8 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
-using Script.BlocksMovement;
 using Script.Configs;
 using Script.Controllers.Score;
 using Script.ControllersCore;
-using Script.Installers;
 using Zenject;
 
 namespace Tests

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Zenject;
 
-namespace Tests
+namespace TestsPlayMode
 {
     public class TestScoreView : SceneTestFixture
     {

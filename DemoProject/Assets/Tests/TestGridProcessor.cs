@@ -1,10 +1,9 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
-using Script.BlocksMovement;
+using Script.BlocksMovement.Grid;
 using Script.Configs;
 using UnityEngine;
 using Zenject;
-using Grid = Script.BlocksMovement.Grid;
 
 namespace Tests
 {
@@ -39,7 +38,7 @@ namespace Tests
         
         #region Setup
         
-        [Inject] private Grid _grid;
+        [Inject] private GridProcessor _gridProcessor;
         [Inject] private GridModel _gridModel;
         [Inject] private BoardSettings _boardSettings;
         
@@ -68,7 +67,7 @@ namespace Tests
             _thirdChild.transform.position = new Vector3(4,4,0);
             _thirdChild.parent = _block;
 
-            Container.BindInterfacesAndSelfTo<Grid>().AsSingle();
+            Container.BindInterfacesAndSelfTo<GridProcessor>().AsSingle();
             Container.BindInterfacesAndSelfTo<GridModel>().AsSingle().WithArguments(_spawnPoint);
             Container.Bind<BoardSettings>().AsSingle();
             _linesCleaner = Substitute.For<ILinesCleaner>();
@@ -91,14 +90,14 @@ namespace Tests
             Debug.Log(_block.position);
             Debug.Log(_firstChild.position);
             Debug.Log(_secondChild.position);
-            Assert.AreEqual(data.expectedResult, _grid.CheckMovementIsValid(_block));
+            Assert.AreEqual(data.expectedResult, _gridProcessor.CheckMovementIsValid(_block));
         }
         
         [Test, TestCaseSource(nameof(CheckTopBorderData))]
         public void CheckIfTopBorderReached_CorrectCheck((Vector3 blockNewPosition, bool expectedResult)data)
         {
             _block.position = data.blockNewPosition;
-            Assert.AreEqual(data.expectedResult, _grid.CheckIfTopBorderReached(_block));
+            Assert.AreEqual(data.expectedResult, _gridProcessor.CheckIfTopBorderReached(_block));
         }
     }
 }

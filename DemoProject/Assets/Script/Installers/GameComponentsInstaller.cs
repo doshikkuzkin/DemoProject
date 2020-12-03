@@ -1,10 +1,10 @@
 using Script.Audio;
 using Script.BlocksMovement;
+using Script.BlocksMovement.Grid;
 using Script.Controllers.Score;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
-using Grid = Script.BlocksMovement.Grid;
 
 namespace Script.Installers
 {
@@ -23,7 +23,7 @@ namespace Script.Installers
             Container.BindInterfacesAndSelfTo<BlockMovement>().AsSingle();
             Container.BindInterfacesAndSelfTo<GhostBlockMovement>().AsSingle();
             
-            Container.BindInterfacesAndSelfTo<Grid>().AsSingle();
+            Container.BindInterfacesAndSelfTo<GridProcessor>().AsSingle();
             Container.BindInterfacesAndSelfTo<GridModel>().AsSingle().WithArguments(spawnPoint);
 
             Container.BindInterfacesAndSelfTo<ScoreModel>().AsSingle();

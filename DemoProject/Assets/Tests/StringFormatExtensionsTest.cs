@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Script.Helpers;
-using UnityEngine;
-using UnityEngine.TestTools;
 
 namespace Tests
 {
