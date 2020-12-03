@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace Script.Installers
+namespace Script.Configs.Installers
 {
     [CreateAssetMenu(fileName = "BoardSettingsInstaller", menuName = "Installers/BoardSettingsInstaller")]
     public class SettingsInstaller : ScriptableObjectInstaller<SettingsInstaller>

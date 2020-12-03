@@ -1,6 +1,4 @@
-using Script.Installers;
-
-namespace Script.GameControllers
+namespace Script.Controllers.Score
 {
     public class ScoreModel : IScoreModel
     {

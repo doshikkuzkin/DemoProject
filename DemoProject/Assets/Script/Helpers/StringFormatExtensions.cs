@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Script.Helpers
 {
     public static class StringFormatExtensions

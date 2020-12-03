@@ -4,16 +4,16 @@ using Script.ControllersCore;
 using Script.ControllersEvents;
 using UnityEngine;
 
-namespace Script.GameControllers
+namespace Script.Controllers
 {
     public class SpawnController : ControllerBase
     {
         private BlocksSpawner _blocksSpawner;
-        private Board _board;
+        private Board.Board _board;
         
         public SpawnController(IControllerFactory controllerFactory,
             BlocksSpawner blocksSpawner,
-            Board board)
+            Board.Board board)
             : base(controllerFactory)
         {
             _blocksSpawner = blocksSpawner;

@@ -1,13 +1,12 @@
 using System;
 using Script.Audio;
-using Script.GameControllers;
-using Script.GameControllersInterfaces;
+using Script.BlocksMovement;
+using Script.Configs;
 using Script.Installers;
 using UnityEngine;
-using Zenject;
 using Object = UnityEngine.Object;
 
-namespace Script.BlocksMovement
+namespace Script.Board
 {
     public class Board : ILinesCleaner
     {

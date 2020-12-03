@@ -1,4 +1,4 @@
-namespace Script.GameControllers
+namespace Script.Controllers.Score
 {
     public interface IScoreProcessor
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Script.Installers
+namespace Script.Configs
 {
  
         [Serializable]

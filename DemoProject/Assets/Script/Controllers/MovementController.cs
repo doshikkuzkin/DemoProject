@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Script.BlocksMovement;
 using Script.ControllersCore;
 
-namespace Script.GameControllers
+namespace Script.Controllers
 {
     public class MovementController : ControllerBase
     {

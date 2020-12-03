@@ -1,10 +1,7 @@
-using Script.GameControllersInterfaces;
 using Script.Helpers;
 using TMPro;
-using UnityEngine;
-using Zenject;
 
-namespace Script.GameControllers
+namespace Script.Controllers.Score
 {
     public class ScoreView : IScoreView
     {
@@ -18,17 +15,6 @@ namespace Script.GameControllers
             _linesText = linesText;
             _levelText = levelText;
         }
-
-        // public void UpdateScoreText(int lines, int score)
-        // {
-        //     _linesText.text = lines.ToString();
-        //     _scoreText.text = score.FormatScore();
-        // }
-        //
-        // public void UpdateLevelText(int level)
-        // {
-        //     _levelText.text = level.ToString();
-        // }
 
         public void DisplayScoreView(IScoreModel scoreModel)
         {

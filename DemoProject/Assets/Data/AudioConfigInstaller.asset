@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8801bfa0d7cf74bfaa6e62640986f2c2, type: 3}
   m_Name: AudioConfigInstaller
   m_EditorClassIdentifier: 
-  _audioConfig:
+  audioConfig:
     backgroundMusic: {fileID: 8300000, guid: 27127a3c3223441498080e90051d085c, type: 3}
     sounds:
     - soundType: 0

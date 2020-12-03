@@ -1,6 +1,6 @@
 using System;
 
-namespace Script.BlocksMovement
+namespace Script.Board
 {
     public interface ILinesCleaner
     {

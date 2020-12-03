@@ -1,6 +1,7 @@
 using System.Threading;
+using Script.Controllers;
+using Script.Controllers.Score;
 using Script.ControllersCore;
-using Script.GameControllers;
 using Zenject;
 
 public class ControllersInstaller : MonoInstaller

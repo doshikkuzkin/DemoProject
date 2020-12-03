@@ -1,4 +1,5 @@
 using Script.Audio;
+using Script.Configs;
 using Script.Installers;
 using UnityEngine;
 using Zenject;
@@ -7,7 +8,7 @@ namespace Script.BlocksMovement
 {
     public class BlockMovement : IInitializable
     {
-        private Board _board;
+        private Board.Board _board;
         private BlocksSpeedSettings _speedSettings;
         
         private float _secondsPassedAfterMove;
@@ -15,7 +16,7 @@ namespace Script.BlocksMovement
 
         public bool IsMovementEnabled { get; set; }
 
-        public BlockMovement(Board board, BlocksSpeedSettings speedSettings)
+        public BlockMovement(Board.Board board, BlocksSpeedSettings speedSettings)
         {
             _board = board;
             _speedSettings = speedSettings;

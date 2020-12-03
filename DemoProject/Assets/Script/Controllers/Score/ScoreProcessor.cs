@@ -1,14 +1,14 @@
-using Script.Installers;
+using Script.Configs;
 
-namespace Script.GameControllers
+namespace Script.Controllers.Score
 {
     public class ScoreProcessor : IScoreProcessor
     {
         public IScoreView ScoreView { get; }
         public IScoreModel ScoreModel { get; }
         
-        private DifficultyLevelsConfig _difficultyLevels;
-        private BlocksSpeedSettings _blocksSpeedSettings;
+        private readonly DifficultyLevelsConfig _difficultyLevels;
+        private readonly BlocksSpeedSettings _blocksSpeedSettings;
 
         public ScoreProcessor(DifficultyLevelsConfig difficultyLevels, BlocksSpeedSettings blocksSpeedSettings, IScoreView scoreView, IScoreModel scoreModel)
         {

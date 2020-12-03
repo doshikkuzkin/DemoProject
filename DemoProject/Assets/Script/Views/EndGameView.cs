@@ -1,10 +1,9 @@
 using System;
-using Script.GameControllersInterfaces;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Script.GameControllers
+namespace Script.Views
 {
     public class EndGameView : IUIWindow, IInitializable
     {

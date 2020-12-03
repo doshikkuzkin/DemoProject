@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Script.Installers
+namespace Script.Configs
 {
     [Serializable]
     public class AudioConfig

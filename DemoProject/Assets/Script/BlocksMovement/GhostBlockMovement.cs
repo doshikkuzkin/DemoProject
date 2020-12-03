@@ -5,11 +5,11 @@ namespace Script.BlocksMovement
 {
     public class GhostBlockMovement
     {
-        private Board _board;
+        private Board.Board _board;
         
         public bool IsMovementEnabled { get; set; }
 
-        public GhostBlockMovement(Board board)
+        public GhostBlockMovement(Board.Board board)
         {
             _board = board;
         }

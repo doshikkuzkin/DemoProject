@@ -1,4 +1,4 @@
-namespace Script.Installers
+namespace Script.Configs
 {
     public enum SoundType
     {

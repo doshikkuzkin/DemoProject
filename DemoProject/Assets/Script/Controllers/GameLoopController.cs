@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 using Script.Audio;
-using Script.BlocksMovement;
+using Script.Configs;
+using Script.Controllers.Score;
 using Script.ControllersCore;
-using Script.GameControllersInterfaces;
-using Script.Installers;
+using Script.Views;
 using UnityEngine;
 
-namespace Script.GameControllers
+namespace Script.Controllers
 {
     public class GameLoopController : ControllerBase
     {

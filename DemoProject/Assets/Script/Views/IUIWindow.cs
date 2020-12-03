@@ -1,6 +1,6 @@
 using System;
 
-namespace Script.GameControllersInterfaces
+namespace Script.Views
 {
     public interface IUIWindow
     {
