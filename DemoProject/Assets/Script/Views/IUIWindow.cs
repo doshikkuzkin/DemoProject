@@ -7,6 +7,6 @@ namespace Script.Views
         void ShowWindow();
         void HideWindow();
 
-        event Action OnCloseButtonPressed;
+        event Action OnStartButtonPressed;
     }
 }

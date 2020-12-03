@@ -10,7 +10,7 @@ namespace Script.Views
     private GameObject _endGameUI;
     private Button _replayButton;
 
-    public event Action OnCloseButtonPressed;
+    public event Action OnStartButtonPressed;
 
     public EndGameView(GameObject endGameUI, Button replayButton)
     {
@@ -35,7 +35,7 @@ namespace Script.Views
 
     private void Replay()
     {
-        OnCloseButtonPressed?.Invoke();
+        OnStartButtonPressed?.Invoke();
     }
     
     }

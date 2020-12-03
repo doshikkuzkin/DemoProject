@@ -24,7 +24,7 @@ namespace Script.Controllers
         protected override Task OnStartAsync()
         {
             _endGameView.ShowWindow();
-            _endGameView.OnCloseButtonPressed += StartGame;
+            _endGameView.OnStartButtonPressed += StartGame;
             return Task.CompletedTask;
         }
 
@@ -39,7 +39,7 @@ namespace Script.Controllers
 
         protected override Task OnStopAsync()
         {
-            _endGameView.OnCloseButtonPressed -= StartGame;
+            _endGameView.OnStartButtonPressed -= StartGame;
             return Task.CompletedTask;
         }
         
